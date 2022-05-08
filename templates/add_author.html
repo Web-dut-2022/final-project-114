@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加作者</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+</head>
+<body>
+<div style="height: 100px;text-align:center;" >
+    <h1>添加作者</h1>
+</div>
+
+<div class="container">
+<center>
+    <form class="form-horizontal" action="{% url 'add_author' %}" method="post" novalidate>
+    {% csrf_token %}
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">作者姓名</label>
+            <div class="col-sm-10">
+                <input type="text" id="name" class="form-control" placeholder="name"  name="name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="age" class="col-sm-2 control-label">作者年龄</label>
+            <div class="col-sm-10">
+                <input type="number" id="age" class="form-control" placeholder="age" required="" autofocus="" name="age">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tel" class="col-sm-2 control-label">电话</label>
+            <div class="col-sm-10">
+                <input type="text" id="tel" class="form-control" placeholder="tel" required="" autofocus="" name="tel">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="addr" class="col-sm-2 control-label">地址</label>
+            <div class="col-sm-10">
+                <input type="text" id="addr" class="form-control" placeholder="addr" required="" autofocus="" name="addr">
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+    </form>
+</center>
+</div>
+
+
+</body>
+</html>
