@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑书籍</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+</head>
+<body>
+<div style="height: 100px;text-align:center;" >
+    <h1>编辑书籍</h1>
+</div>
+<div class="container">
+    <form class="form-horizontal" action="{% url 'edit_author' author_obj.id  %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-10">
+                <input type="text" id="name" class="form-control" placeholder="name" name="name"
+                       value="{{ author_obj.name }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="age" class="col-sm-2 control-label">年龄</label>
+            <div class="col-sm-10">
+                <input type="number" id="age" class="form-control" placeholder="age" name="age"
+                       value="{{ author_obj.age }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tel" class="col-sm-2 control-label">电话</label>
+            <div class="col-sm-10">
+                <input type="text" id="tel" class="form-control" placeholder="tel" name="tel"
+                       value="{{ author_obj.tel }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="addr" class="col-sm-2 control-label">地址</label>
+            <div class="col-sm-10">
+                <input type="text" id="addr" class="form-control" placeholder="addr" name="addr"
+                       value="{{ author_obj.addr }}">
+            </div>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">更新内容</button>
+    </form>
+
+</div>
+
+</body>
+</html>
