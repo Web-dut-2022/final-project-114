@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作者管理</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="stylesheet" href="/static/plugins/sweetalert/sweetalert.css">
+    <script src="/static/plugins/sweetalert/sweetalert-dev.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">图书馆管理系统 / 作者管理</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">{{ request.session.user }}</a></li>
+                <li><a href="#">{{ request.session.last_time|slice:':19' }}</a></li>
+                <li><a href="{% url 'logout' %}">注销</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="{% url 'books' %}">图书管理</a></li>
+                <li class="active"><a href="">作者管理<span class="sr-only">(current)</span></a></li>
+                <li><a href="{% url 'publish' %}">出版社管理</a></li>
+                <li><a href="{% url 'borrow' %}">借阅信息</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">快速导航</a></li>
+                <li><a href="">财务管理</a></li>
+                <li><a href="">查询统计</a></li>
+                <li><a href="">系统维护</a></li>
+                <li><a href="">读者信息</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">图 书 馆</a></li>
+                <li><a href="">修改数据</a></li>
+                <li><a href="">关于我们</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <a href="{% url 'add_author' %}" class="btn btn-primary">添加作者</a>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>电话</th>
+                    <th>地址</th>
+                    <th style="padding-left: 42px">操作</th>
+                </tr>
+                {% for author in authors %}
+                    {% if author.id != 0%}
+                        <tr>
+                            <th scope="row">{{ author.id }}</th>
+                            <td>{{ author.name }}</td>
+                            <td>{{ author.age }}</td>
+                            <td>{{ author.tel }}</td>
+                            <td>{{ author.addr }}</td>
+                            <td>
+                                <a href="{% url 'edit_author' author.id %}" class="btn btn-sm btn-warning">编辑</a>
+                                <a edit_id="{{ author.id }}" class="btn btn-sm btn-danger">删除</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% csrf_token %}
+<script>
+    $(".btn-danger").click(function () {
+        _this = $(this);
+
+        swal({
+                title: "确定删除吗？",
+                text: "你将无法恢复！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定删除！",
+                cancelButtonText: "取消删除！",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    swal("删除！", "删除成功!",
+                        "success");
+                    $.ajax({
+                        url: "{% url 'del_author' %}",
+                        type: 'post',
+                        data: {
+                            del_id: _this.attr('edit_id'),
+                            csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                        },
+                        success: function (data) {
+                            var data = JSON.parse(data);
+                            if (data.status){
+                                _this.parent().parent().remove();
+                            }else{
+                                window.location=data.url
+                            }
+
+                        }
+                    })
+                } else {
+                    swal("取消!", "取消成功!",
+                        "error");
+                }
+            });
+
+
+    })
+</script>
+
+</body>
+</html>
